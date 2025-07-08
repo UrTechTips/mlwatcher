@@ -1,0 +1,20 @@
+[build-system]
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "mlwatcher"
+version = "0.1.0"
+description = "Lightweight remote/local log monitor for ML training."
+authors = [{name = "Sai Sreenadh Chilukuri", email = "saisrinadhch@gmail.com"}]
+license = {text = "MIT"}
+readme = "README.md"
+requires-python = ">=3.8"
+dependencies = [
+    "Flask",
+    "requests"
+]
+
+[project.urls]
+"Homepage" = "https://github.com/UrTechTips/mlwatcher"
+"Bug Tracker" = "https://github.com/UrTechTips/mlwatcher/issues"
