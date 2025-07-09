@@ -20,10 +20,8 @@ def log_to_file(log_path: str, message: str):
     payload = message.encode('utf-8')
     ts = time.time()
     header = struct.pack(HEADER_FMT, MAGIC, VERSION, ts, len(payload))
-    print(os.path.dirname(log_path))
     os.makedirs(os.path.dirname(log_path), exist_ok=True)
 
     with open(log_path, 'ab') as f:
         f.write(header)
         f.write(payload)
-

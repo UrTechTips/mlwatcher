@@ -207,9 +207,15 @@
                 
                 const data = await response.json();
                 
-                updateStatus('connected');
-                processLogs(data);
-                lastLogCount = data.length;                
+                if (data.length > lastLogCount) {
+                    const newEntries = data.slice(lastLogCount);
+                    processLogs(newEntries);
+                    lastLogCount = data.length;
+                } else if (data.length < lastLogCount) {
+                    clearLogs();
+                    processLogs(data);
+                    lastLogCount = data.length;
+                }            
             } catch (error) {
                 console.error('Error fetching logs:', error);
                 updateStatus('disconnected');
