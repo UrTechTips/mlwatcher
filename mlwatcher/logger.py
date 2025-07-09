@@ -1,5 +1,6 @@
 import os
 import time
+import logging
 import requests
 from threading import Thread, Lock
 from mlwatcher.log_reader import LogReader
@@ -16,6 +17,7 @@ class Logger:
 
         if not self.dashboard_url:
             self.app = Flask(__name__)
+            self.app.logger.setLevel(logging.ERROR)
 
         self.entries = []
         self.entries_lock = Lock()
@@ -49,8 +51,8 @@ class Logger:
 
 
     def _flask_thread(self):
-        self.app.run(host="0.0.0.0", port=PORT)
-    
+        self.app.run(host="0.0.0.0", port=PORT, debug=False, use_reloader=False)
+
     def _register_routes(self):
         @self.app.route('/')
         def index():
@@ -58,7 +60,6 @@ class Logger:
 
         @self.app.route('/logs')
         def get_logs():
-            new_logs = []
             with self.entries_lock:
                 new_logs = self.entries.copy()
                 self.entries.clear()
@@ -75,6 +76,7 @@ class Logger:
         self.watcher_thread.start()
 
     def log(self, message):
+        print("Logging message:", message)
         log_to_file(self.log_path, message)
     
     def stop(self):

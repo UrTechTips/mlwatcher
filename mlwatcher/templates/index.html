@@ -207,21 +207,9 @@
                 
                 const data = await response.json();
                 
-                // Update status
                 updateStatus('connected');
-                
-                // Process the logs - only show new entries
-                if (data.length > lastLogCount) {
-                    const newEntries = data.slice(lastLogCount);
-                    processLogs(newEntries);
-                    lastLogCount = data.length;
-                } else if (data.length < lastLogCount) {
-                    // Logs were cleared on server side
-                    clearLogs();
-                    processLogs(data);
-                    lastLogCount = data.length;
-                }
-                
+                processLogs(data);
+                lastLogCount = data.length;                
             } catch (error) {
                 console.error('Error fetching logs:', error);
                 updateStatus('disconnected');
