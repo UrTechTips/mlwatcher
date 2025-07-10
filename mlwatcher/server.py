@@ -42,7 +42,7 @@ class Server:
         def post_logs():
             log_entry = request.json.get('log')
             if log_entry:
-                self.entries.append(log_entry)
+                self.entries.extend(log_entry)
             return jsonify({'status': 'success'}), 201
 
         @self.app.route('/logs')

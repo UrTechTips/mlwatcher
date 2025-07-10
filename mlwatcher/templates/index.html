@@ -206,7 +206,6 @@
                 }
                 
                 const data = await response.json();
-                
                 if (data.length > lastLogCount) {
                     const newEntries = data.slice(lastLogCount);
                     processLogs(newEntries);

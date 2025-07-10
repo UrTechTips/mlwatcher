@@ -20,6 +20,15 @@ class Logger:
 
         self.reader = LogReader(log_path, poll_interval=poll_interval)
 
+        if dashboard_url:
+            try:
+                response = requests.get(f"{dashboard_url}/")
+                if response.status_code != 200:
+                    raise ValueError(f"Dashboard URL {dashboard_url} is not reachable. Status code: {response.status_code}")
+                print(f"Connected to dashboard at {dashboard_url}")
+            except requests.RequestException as e:
+                raise ValueError(f"Failed to connect to dashboard URL {dashboard_url}: {e}")
+
         if not self.dashboard_url:
             self.server = Server(port=PORT, verbose=verbose)
             self.server.entries = self.entries
@@ -41,7 +50,9 @@ class Logger:
                         logs_to_send = self.entries.copy()
                         self.entries.clear()
                     if logs_to_send:
-                        response = requests.post(self.dashboard_url, json=logs_to_send)
+                        response = requests.post(f"{self.dashboard_url}/post_logs", json={
+                            'log': logs_to_send
+                        })
                         if response.status_code != 201:
                             print(f"Failed to post logs: {response.status_code} {response.text}")
                         else:
