@@ -52,15 +52,15 @@ class Server:
     def _flask_thread(self):
         self.app.run(host="0.0.0.0", port=self.PORT) 
     
-    def start(self, block=True):
-        self.flask_thread = Thread(target=self._flask_thread, name="FlaskThread", daemon=not block)
-        self.flask_thread.start()
-
+    def start(self, block=False):
         if block:
             try:
-                self.flask_thread.join()
+                self.app.run(host="0.0.0.0", port=self.PORT)
             except KeyboardInterrupt:
-                print("\nMLWatcher Server stopped.")
+                print("\n[MLWatcher] Server stopped by user.")
+        else:
+            self.flask_thread = Thread(target=self._flask_thread, daemon=True)
+            self.flask_thread.start()
 
     def stop(self):
         if self.flask_thread.is_alive():
