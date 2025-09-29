@@ -1,2 +1,4 @@
 include README.md LICENSE
 recursive-include mlwatcher/templates *.html
+include mlwatcher/__init__.py
+recursive-include mlwatcher *.py

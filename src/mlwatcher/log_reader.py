@@ -1,6 +1,7 @@
 import struct
 import os
 import time
+from threading import Event
 
 MAGIC = b'MLWG'
 VERSION = 1
@@ -8,18 +9,17 @@ HEADER_FMT = '>4sB d I'
 HEADER_SIZE = struct.calcsize(HEADER_FMT)
 
 class LogReader:
-    def __init__(self, log_path: str, poll_interval: float = 5.0):
+    def __init__(self, log_path: str, poll_interval: float = 5.0, stop_event: Event = None):
         self.log_path = log_path
         self.poll_interval = poll_interval
+        self.stop_event = stop_event or Event()
         self.offset = 0
-        self.running = False
 
     def __enter__(self):
-        self.running = True
         return self
-
-    def __exit__(self, exc_type, exc_val, exc_tb):
-        self.running = False
+    
+    def __exit__(self, exc_type, exc_value, traceback):
+        self.stop_event.set()
 
     def _read_new_entries(self):
         entries = []
@@ -48,11 +48,11 @@ class LogReader:
 
     def watch(self):
         """Generator: yields each new (timestamp, message) as they arrive."""
-        while self.running:
+        while not self.stop_event.is_set():
             new_entries = self._read_new_entries()
             for ts, msg in new_entries:
                 yield ts, msg
-            time.sleep(self.poll_interval)
+            self.stop_event.wait(self.poll_interval)
 
     def to_text(self) -> str:
         if not os.path.exists(self.log_path):
