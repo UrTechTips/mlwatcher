@@ -143,6 +143,14 @@ class Logger:
 
 
     def to_text(self, target_path: str=None) -> str:
+        """Converts the log to a text format.
+
+        Args:
+            target_path (str, optional): The path to save the text file. Defaults to None.
+
+        Returns:
+            str: The log in text format.
+        """
         text = self.reader.to_text()
         if target_path:
             with open(target_path, 'w') as f:
