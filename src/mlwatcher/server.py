@@ -5,6 +5,16 @@ from threading import Thread
 from flask import Flask, jsonify, render_template, request
 
 class Server:
+    """A simple Flask server for serving and receiving log entries.
+    Attributes:
+        PORT (int): Port number for the server to listen on.
+        app (Flask): The Flask application instance.
+        entries (list): List to store log entries.
+        verbose (bool): If True, enables verbose logging.
+    Functions:
+        start(block=False): Starts the Flask server in a separate thread or blocks the main thread.
+        stop(): Stops the Flask server if it is running.
+    """
     def __init__(self, port: int, verbose: bool = False):
         self.PORT = port if port else int(os.environ.get('MLWATCH_PORT', '5000'))
         self.app = Flask(__name__)
@@ -53,6 +63,11 @@ class Server:
         self.app.run(host="0.0.0.0", port=self.PORT) 
     
     def start(self, block=False):
+        """Starts the Flask server.
+
+        Args:
+            block (bool, optional): If True, blocks the main thread. Defaults to False.
+        """
         if block:
             try:
                 self.app.run(host="0.0.0.0", port=self.PORT)
@@ -63,13 +78,11 @@ class Server:
             self.flask_thread.start()
 
     def stop(self):
+        """Stops the Flask server if it is running.
+        """
         if self.flask_thread.is_alive():
             print("Stopping MLWatcher Server...")
             self.flask_thread.join(timeout=1)
             print("MLWatcher Server stopped.")
         else:
             print("MLWatcher Server is not running.")
-
-if __name__ == "__main__":
-    server = Server(port=5000, verbose=True)
-    server.start(block=True)

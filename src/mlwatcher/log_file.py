@@ -17,6 +17,12 @@ HEADER_SIZE = struct.calcsize(HEADER_FMT)
 
 
 def log_to_file(log_path: str, message: str):
+    """Logs a message to a file in a structured format.
+
+    Args:
+        log_path (str): The path to the log file.
+        message (str): The log message to write.
+    """
     payload = message.encode('utf-8')
     ts = time.time()
     header = struct.pack(HEADER_FMT, MAGIC, VERSION, ts, len(payload))

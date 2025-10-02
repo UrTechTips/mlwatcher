@@ -1,13 +1,15 @@
 [build-system]
-requires = ["setuptools>=61.0"]
+requires = ["setuptools>=61.0", "wheel"]
 build-backend = "setuptools.build_meta"
 
 [project]
 name = "mlwatcher"
 version = "0.2.0"
 description = "A lightweight logging dashboard for monitoring ML training or any long-running Python process, locally or remotely."
-authors = [{name = "Sai Sreenadh Chilukuri", email = "saisrinadhch@gmail.com"}]
-license = "MIT"
+authors = [
+    { name = "Sai Sreenadh Chilukuri", email = "saisrinadhch@gmail.com" }
+]
+license = { text = "MIT" }
 readme = "README.md"
 requires-python = ">=3.8"
 dependencies = [
@@ -23,14 +25,14 @@ classifiers = [
 ]
 
 [project.urls]
-"Homepage" = "https://github.com/UrTechTips/mlwatcher"
+Homepage = "https://github.com/UrTechTips/mlwatcher"
 "Bug Tracker" = "https://github.com/UrTechTips/mlwatcher/issues"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.setuptools.package-data]
+mlwatcher = ["templates/*.html"]
 
 [tool.setuptools]
 include-package-data = true
-
-[tool.setuptools.package-data]
-"mlwatcher" = ["templates/*.html"]
-
-[tool.setuptools.packages.find]
-where = ["mlwatcher"]

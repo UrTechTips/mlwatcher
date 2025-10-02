@@ -10,16 +10,19 @@ PORT = int(os.environ.get('MLWATCH_PORT', '5000'))
 
 class Logger:
     """A Logger class that monitors a log file, serves logs via a web server, and optionally posts logs to a remote dashboard.
+
     Attributes:
         log_path (str): Path to the log file.
         poll_interval (float): Interval in seconds to poll the log file for new entries.
         dashboard_url (str): URL of the remote dashboard to post logs to. If None, a local server is started.
         verbose (bool): If True, prints log messages to the console.
+
     Functions:
         start(): Starts the log monitoring and server/posting threads.
         log(message): Logs a message to the log file and optionally prints it to the console.
         stop(generate_text): Stops the logger and optionally generates a text file from the log.
         to_text(target_path): Converts the log file to a text format and saves it to target_path if provided.
+        
     Example:
         logger = Logger(log_path='training.log', poll_interval=10.0, dashboard_url='http://localhost:8000', verbose=True)
         logger.start()
@@ -100,6 +103,7 @@ class Logger:
         """Starts the log monitoring and server/posting threads.\n
         If dashboard_url is provided, starts a thread to post logs to the dashboard.\n
         If no dashboard_url is provided, starts a local web server to serve logs.
+
         """
         if self.dashboard_url:
             self.post_thread = Thread(target=self._post_logs_thread, daemon=True)
@@ -111,6 +115,7 @@ class Logger:
 
     def log(self, message: str) -> None:
         """Logs a message to the log file and optionally prints it to the console.
+
         Args:
             message (str): The message to log.
         """
@@ -120,6 +125,7 @@ class Logger:
     
     def stop(self, generate_text: bool = False) -> None:
         """Stops the logger and optionally generates a text file from the log.
+
         Args:
             generate_text (bool): If True, generates a text file from the log.
         """
